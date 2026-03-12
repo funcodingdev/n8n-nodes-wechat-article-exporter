@@ -10,8 +10,7 @@ export class WechatArticleExporterApi implements ICredentialType {
 
 	displayName = 'WeChat Article Exporter API';
 
-	// eslint-disable-next-line @n8n/community-nodes/icon-validation
-	icon: Icon = { light: 'file:../icons/wechat.png', dark: 'file:../icons/wechat.png' };
+	icon: Icon = { light: "file:../icons/wechat.svg", dark: "file:../icons/wechat.dark.svg" };
 
 	documentationUrl = 'https://down.mptext.top/dashboard/api';
 
