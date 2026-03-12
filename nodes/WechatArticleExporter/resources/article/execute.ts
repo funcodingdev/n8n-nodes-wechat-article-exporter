@@ -1,6 +1,26 @@
 import type { IExecuteFunctions, INodeExecutionData, IDataObject } from 'n8n-workflow';
 import { wechatApiRequest } from '../../shared/transport';
 
+function getMimeType(format: string): string {
+	const mimeTypes: Record<string, string> = {
+		html: 'text/html',
+		markdown: 'text/markdown',
+		text: 'text/plain',
+		json: 'application/json',
+	};
+	return mimeTypes[format] || 'text/plain';
+}
+
+function getFileExtension(format: string): string {
+	const extensions: Record<string, string> = {
+		html: '.html',
+		markdown: '.md',
+		text: '.txt',
+		json: '.json',
+	};
+	return extensions[format] || '.txt';
+}
+
 export async function executeArticle(
 	this: IExecuteFunctions,
 	operation: string,
@@ -23,8 +43,30 @@ export async function executeArticle(
 			} else if (operation === 'downloadArticle') {
 				qs.url = this.getNodeParameter('articleUrl', i) as string;
 				qs.format = this.getNodeParameter('format', i, 'html') as string;
+				const exportFile = this.getNodeParameter('exportFile', i, false) as boolean;
 				// 下载接口不需要认证
 				response = await wechatApiRequest.call(this, 'GET', '/api/public/v1/download', qs, undefined, false);
+
+				// 如果启用导出文件，返回二进制数据
+				if (exportFile) {
+					const content = response as unknown as string;
+					const mimeType = getMimeType(qs.format);
+					const extension = getFileExtension(qs.format);
+					const dataBuffer = Buffer.from(content, 'utf-8');
+
+					returnData.push({
+						json: {},
+						binary: {
+							data: {
+								data: dataBuffer.toString('base64'),
+								mimeType,
+								fileName: `article${extension}`,
+							},
+						},
+						pairedItem: { item: i },
+					});
+					continue;
+				}
 			} else {
 				throw new Error(`不支持的文章操作: ${operation}`);
 			}

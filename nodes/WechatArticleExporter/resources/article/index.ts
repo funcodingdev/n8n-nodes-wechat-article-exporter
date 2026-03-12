@@ -24,7 +24,7 @@ export const articleDescription: INodeProperties[] = [
 				name: '下载文章内容',
 				value: 'downloadArticle',
 				action: '下载文章内容',
-				description: '获取文章内容，支持 html / markdown / text / JSON 格式',
+				description: '获取文章内容，支持 html / markdown / text / JSON 格式，可导出为文件',
 			},
 		],
 		default: 'getArticleList',
@@ -115,4 +115,16 @@ export const articleDescription: INodeProperties[] = [
 			},
 		]
 	},
+	{
+		displayName: '导出文件',
+		name: 'exportFile',
+		type: 'boolean',
+		default: false,
+		displayOptions: {
+			show: {
+				...showOnlyForArticle,
+				operation: ['downloadArticle'],
+			},
+		}
+    }
 ];
