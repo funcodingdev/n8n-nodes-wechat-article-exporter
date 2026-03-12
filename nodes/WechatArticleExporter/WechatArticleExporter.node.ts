@@ -14,8 +14,7 @@ export class WechatArticleExporter implements INodeType {
 	description: INodeTypeDescription = {
 		displayName: '微信公众号文章导出器(WeChatArticleExporter)',
 		name: 'wechatArticleExporter',
-		// eslint-disable-next-line @n8n/community-nodes/icon-validation
-		icon: { light: 'file:../../icons/wechat.svg', dark: 'file:../../icons/wechat.svg' },
+		icon: { light: 'file:../../icons/wechat.svg', dark: 'file:../../icons/wechat.dark.svg' },
 		group: ['transform'],
 		version: 1,
 		subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',
